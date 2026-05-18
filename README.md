@@ -169,6 +169,18 @@ notebooklm-study-skill/
 
 ---
 
+## Feedback
+
+This skill is a work in progress and I'd love to make it better.
+
+If you try it and something doesn't work the way you expected, a prompt feels off, or you have ideas for new features — please open an issue:
+
+**[Submit feedback or ideas →](https://github.com/lrdmora/notebooklm-study-skill/issues)**
+
+Even a one-line note like *"PROMPT_Flashcards didn't handle chapters well"* is genuinely useful. All feedback welcome.
+
+---
+
 ## License
 
 MIT — free to use, modify, and share.
