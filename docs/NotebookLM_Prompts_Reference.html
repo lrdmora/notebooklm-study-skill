@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotebookLM Study System — Prompts Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400;600&family=Source+Code+Pro:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2336;
+    --border: #2a3050;
+    --text: #e2e6f0;
+    --muted: #7a84a0;
+    --accent: #4ecca3;
+    --accent-dim: #1a3d32;
+    --accent2: #f0a500;
+    --accent2-dim: #2e2000;
+    --p1: #4ecca3;
+    --p2: #5b9cf6;
+    --p3: #c678dd;
+    --p4: #e06c75;
+    --code-bg: #111520;
+    --code-border: #2a3050;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* SIDEBAR NAV */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 40px 24px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 32px;
+    line-height: 1.3;
+  }
+
+  .nav-section {
+    margin-bottom: 24px;
+  }
+
+  .nav-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-link {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 8px;
+    border-radius: 3px;
+    margin-bottom: 2px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--accent);
+  }
+
+  .nav-link.phase1 { border-left-color: transparent; }
+  .nav-link.phase1:hover { border-left-color: var(--p1); }
+  .nav-link.phase2:hover { border-left-color: var(--p2); }
+  .nav-link.phase3:hover { border-left-color: var(--p3); }
+
+  /* MAIN CONTENT */
+  .main {
+    padding: 60px 64px;
+    max-width: 900px;
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 60px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-eyebrow {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .header-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: 40px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-p1 { background: var(--p1); box-shadow: 0 0 8px var(--p1); }
+  .dot-p2 { background: var(--p2); box-shadow: 0 0 8px var(--p2); }
+  .dot-p3 { background: var(--p3); box-shadow: 0 0 8px var(--p3); }
+  .dot-p4 { background: var(--p4); box-shadow: 0 0 8px var(--p4); }
+  .dot-gray { background: var(--muted); }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .section-meta {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* PROMPT BLOCK */
+  .prompt-block {
+    margin-bottom: 32px;
+  }
+
+  .prompt-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .prompt-label h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .prompt-tag {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  .prompt-tag.claude { background: var(--accent-dim); color: var(--accent); }
+  .prompt-tag.notebooklm { background: var(--accent2-dim); color: var(--accent2); }
+
+  .prompt-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .prompt-where {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .prompt-where strong {
+    color: var(--accent2);
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    padding: 20px 24px;
+    overflow-x: auto;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: #c8d0e8;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  pre.notebooklm-prompt {
+    border-left-color: var(--accent2);
+  }
+
+  pre.system-prompt {
+    border-left-color: var(--p3);
+  }
+
+  /* SAVE NOTE */
+  .save-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 16px;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
+  .save-note-icon {
+    font-size: 15px;
+  }
+
+  .save-note strong {
+    color: var(--accent2);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12px;
+  }
+
+  .save-note span {
+    color: var(--muted);
+  }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--p2);
+    border-radius: 0 4px 4px 0;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .info-box strong {
+    color: var(--text);
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* STEP NUMBER */
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .step-num {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--bg);
+    background: var(--p2);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-num.green { background: var(--p1); color: var(--bg); }
+  .step-num.purple { background: var(--p3); }
+  .step-num.red { background: var(--p4); }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer p {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* PRINT */
+  @media print {
+    .layout { display: block; }
+    .sidebar { display: none; }
+    .main { padding: 32px; max-width: 100%; }
+    body { background: white; color: #1a1a2e; font-size: 13px; }
+    pre { background: #f5f5f5; color: #1a1a2e; border-color: #ddd; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section { page-break-inside: avoid; }
+    h1 { color: #1a1a2e; font-size: 32px; }
+    h1 span { color: #2d6a4f; }
+    h2 { color: #1a1a2e; }
+    .save-note { background: #f0f0f0; border-color: #ddd; }
+    .info-box { background: #f0f0f0; border-color: #ddd; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">NotebookLM System</div>
+    <div class="sidebar-title">Prompts Reference</div>
+
+    <div class="nav-section">
+      <div class="nav-label">Phase 1 — Setup in Claude</div>
+      <a class="nav-link phase1" href="#master-index">Master Index Prompt</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">NotebookLM Config</div>
+      <a class="nav-link" href="#system-prompt">System Prompt</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Utility Prompts</div>
+      <a class="nav-link" href="#prompt-index" style="border-left-color: #e67e22; color: #e67e22;">PROMPT_Index</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Phase 2 — Unit Setup</div>
+      <a class="nav-link phase2" href="#extraction">Step 1 — Extraction</a>
+      <a class="nav-link phase2" href="#key-concepts">Step 2 — Key Concepts</a>
+      <a class="nav-link phase2" href="#glossary">Step 3 — Glossary</a>
+      <a class="nav-link phase2" href="#formulas">Step 4 — Formulas</a>
+      <a class="nav-link phase2" href="#slide-deck">Step 5 — Slide Deck</a>
+      <a class="nav-link phase2" href="#study-notes">Step 6 — Study Notes</a>
+      <a class="nav-link phase2" href="#practice-quiz">Step 7 — Practice Quiz</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label">Phase 3 — Final Prep</div>
+      <a class="nav-link phase3" href="#concept-map">Step 1 — Concept Map</a>
+      <a class="nav-link phase3" href="#master-glossary">Step 2 — Master Glossary</a>
+      <a class="nav-link phase3" href="#master-formulas">Step 3 — Master Formulas</a>
+      <a class="nav-link phase3" href="#weak-spot">Step 4 — Weak Spot Report</a>
+      <a class="nav-link phase3" href="#final-deck">Step 5 — Final Slide Deck</a>
+      <a class="nav-link phase3" href="#cumulative-notes">Step 6 — Cumulative Notes</a>
+      <a class="nav-link phase3" href="#cumulative-exam">Step 7 — Cumulative Exam</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-eyebrow">Complete Prompt Library</div>
+      <h1>NotebookLM<br><span>Prompts</span> Reference</h1>
+      <p class="header-desc">Every copy-paste prompt for building and using your NotebookLM study system. Use this alongside the Quick Start Guide. Prompts marked <strong style="color:var(--accent)">CLAUDE</strong> go into Claude first. Prompts marked <strong style="color:var(--accent2)">NOTEBOOKLM</strong> go into your notebook chat.</p>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div class="section" id="master-index">
+      <div class="section-header">
+        <div class="phase-dot dot-p1"></div>
+        <h2>Phase 1 — Master Index Setup</h2>
+        <span class="section-meta">Run in Claude · Before NotebookLM</span>
+      </div>
+
+      <div class="info-box">
+        <strong>Run this in Claude before you touch NotebookLM.</strong> Paste the prompt below, fill in your class details, and Claude will rename all your files and generate your <code style="background:var(--surface);padding:1px 5px;border-radius:2px;font-size:12px;">00_MASTER_INDEX</code>. Save that output as a file and upload it to NotebookLM along with your renamed source files.
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <h3>Master Index Generator</h3>
+          <span class="prompt-tag claude">Claude</span>
+        </div>
+        <div class="prompt-desc">Fill in every [bracket] before pasting. If Claude has access to your folder, paste the path. If not, list your files manually below the prompt.</div>
+        <div class="prompt-where"><strong>→ Paste into:</strong> Claude (claude.ai or the Claude app)</div>
+        <pre>I'm setting up a NotebookLM for studying [CLASS NAME / SUBJECT].
+I need your help building a master index and naming system for all
+my source files before I upload them.
+
+Here is the prefix system I want to use:
+
+SOURCE FILE PREFIXES
+- DATA_U[#]_ — Textbook / study material organized by unit
+- DATA_C[#]_ — Textbook / study material organized by chapter
+  (use both if studying by chapter AND unit)
+- VOCAB_U[#]_ — Glossary organized by unit
+- VOCAB_C[#]_ — Glossary organized by chapter
+- FORMULAS_U[#]_ — Formula sheet organized by unit
+- FORMULAS_C[#]_ — Formula sheet organized by chapter
+  (skip FORMULAS entirely if the class has no formulas)
+- REF_ — Syllabus, grading weights, sample tests, practice questions
+  (upload once, used across all units)
+
+GENERATED NOTE PREFIXES
+(Created inside NotebookLM — do not upload, just track in the index)
+- NOTES_U[#]_ — Processed study notes generated per unit
+- REVIEW_ — Cross-unit and final exam notes
+
+This class has:
+- [#] Units total
+- [#] Chapters total
+- Formula-heavy content: [YES / NO]
+
+My source files are located at:
+[PASTE FOLDER PATH — or list files below if no folder access]
+
+Please do the following:
+1. Read the folder / file list and identify every source file
+2. Assign the correct prefix to each file
+3. Generate a Master Index in this exact format:
+
+MASTER INDEX — [CLASS NAME]
+
+================================================================
+SOURCE FILES — Upload these to NotebookLM
+================================================================
+PREFIX            | RENAMED FILE                  | CONTENTS SUMMARY
+------------------|-------------------------------|------------------
+[one row per file]
+
+================================================================
+GENERATED NOTES — Created inside NotebookLM during study workflow
+================================================================
+PREFIX            | NOTE TITLE                      | STATUS
+------------------|---------------------------------|--------
+NOTES_U[#]_       | NOTES_U[#]_Extraction           | [ ]
+NOTES_U[#]_       | NOTES_U[#]_Key_Concepts         | [ ]
+NOTES_U[#]_       | NOTES_U[#]_Glossary             | [ ]
+NOTES_U[#]_       | NOTES_U[#]_Formulas             | [ ]
+NOTES_U[#]_       | NOTES_U[#]_Slide_Deck_Outline   | [ ]
+NOTES_U[#]_       | NOTES_U[#]_Study_Notes          | [ ]
+NOTES_U[#]_       | NOTES_U[#]_Practice_Quiz        | [ ]
+REVIEW_           | REVIEW_Master_Concept_Map       | [ ]
+REVIEW_           | REVIEW_Master_Glossary          | [ ]
+REVIEW_           | REVIEW_Master_Formulas          | [ ]
+REVIEW_           | REVIEW_Weak_Spot_Report         | [ ]
+REVIEW_           | REVIEW_Final_Slide_Deck_Outline | [ ]
+REVIEW_           | REVIEW_Cumulative_Study_Notes   | [ ]
+REVIEW_           | REVIEW_Cumulative_Practice_Exam | [ ]
+
+================================================================
+FLAGS & NOTES
+================================================================
+AMBIGUOUS FILES: [files that don't fit cleanly]
+DUPLICATES: [files with overlapping content]
+MISSING SOURCES: [prefix categories with no file assigned]
+SUGGESTED ADDITIONAL PREFIXES: [content types not covered above]
+
+4. Flag ambiguous, duplicated, or uncategorized files
+5. Note prefix categories with no file assigned
+6. Suggest additional prefixes if needed
+
+Keep naming concise. Use underscores, no spaces.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save Claude's output as a file named </span>
+          <strong>00_MASTER_INDEX</strong>
+          <span> and upload it to NotebookLM with your renamed source files.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SYSTEM PROMPT -->
+    <div class="section" id="system-prompt">
+      <div class="section-header">
+        <div class="phase-dot dot-gray"></div>
+        <h2>NotebookLM System Prompt</h2>
+        <span class="section-meta">Paste into NotebookLM instructions panel</span>
+      </div>
+
+      <div class="info-box">
+        <strong>Paste this into the NotebookLM instructions panel</strong> after uploading all your source files. Fill in [CLASS NAME] at the top. Do not paste the Master Index here — the system reads <code style="background:var(--surface);padding:1px 5px;border-radius:2px;font-size:12px;">00_MASTER_INDEX</code> directly as a source file.
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <h3>System Prompt</h3>
+          <span class="prompt-tag notebooklm">NotebookLM</span>
+        </div>
+        <div class="prompt-where"><strong>→ Paste into:</strong> NotebookLM → Instructions panel</div>
+        <pre class="system-prompt">You are a study assistant for [CLASS NAME].
+
+Your knowledge base uses a structured prefix system with two categories:
+source files uploaded by the student and generated notes created during
+the study workflow. Always read 00_MASTER_INDEX before answering any
+question. It is the single source of truth for how this notebook is organized.
+
+---
+
+PREFIX SYSTEM
+
+SOURCE FILES
+- DATA_U[#]_ — Textbook and study material for that unit
+- DATA_C[#]_ — Textbook and study material for that chapter
+- VOCAB_U[#]_ / VOCAB_C[#]_ — Glossary. Every term is a potential
+  test target. This is your anchor for all study outputs.
+- FORMULAS_U[#]_ / FORMULAS_C[#]_ — Formula reference
+- REF_ — Syllabus, exam weights, sample tests. Determines what is testable.
+
+GENERATED NOTES
+- NOTES_U[#]_Extraction — Foundation note for the unit. Read this first.
+- NOTES_U[#]_Key_Concepts — Hierarchical concept outline
+- NOTES_U[#]_Glossary — Prioritized glossary cross-referenced with DATA
+- NOTES_U[#]_Formulas — Formulas cross-referenced with VOCAB and DATA
+- NOTES_U[#]_Slide_Deck_Outline — Slide deck outline
+- NOTES_U[#]_Study_Notes — Narrative study guide
+- NOTES_U[#]_Practice_Quiz — Practice quiz
+- REVIEW_Master_Concept_Map — Full course concept map
+- REVIEW_Master_Glossary — Combined glossary with cross-unit priority flags
+- REVIEW_Master_Formulas — Combined formula sheet
+- REVIEW_Weak_Spot_Report — Gap analysis across all units
+- REVIEW_Final_Slide_Deck_Outline — Full course slide deck
+- REVIEW_Cumulative_Study_Notes — Full course study guide by theme
+- REVIEW_Cumulative_Practice_Exam — Full course practice exam
+
+---
+
+SOURCE HIERARCHY
+1. REVIEW_ notes — for multi-unit questions
+2. NOTES_U[#]_ generated notes — for unit-specific questions
+3. VOCAB_U[#]_ / FORMULAS_U[#]_ — for definitions and formulas
+4. DATA_U[#]_ — for context and explanation
+5. REF_ — for exam weight and validation
+
+---
+
+PRIORITY SYSTEM
+- HIGH — In VOCAB + DATA + REF sample questions. Always include.
+- MEDIUM — In VOCAB + DATA, not in REF. Include in most outputs.
+- LOW — In VOCAB with little DATA coverage. Flag as a gap.
+- CROSS-UNIT HIGH — HIGH in two or more units. Near-certain exam content.
+- FOUNDATIONAL — Introduced earlier, carries forward. Flag when it reappears.
+
+---
+
+TEST QUESTION GENERATION
+Default: 80% Multiple Choice / 15% Short Answer / 5% Essay
+
+Weight by priority:
+- HIGH and CROSS-UNIT HIGH → all three sections
+- MEDIUM → multiple choice and short answer only
+- LOW → multiple choice only if included
+- Formula-linked → always include at least one application question
+
+Multiple Choice: 4 options (A/B/C/D), one correct answer, plausible
+distractors. Include correct answer and brief explanation.
+
+Short Answer: 2-4 sentences. Definitions, comparisons, cause-effect.
+Include model answer.
+
+Essay: Claim, evidence, conclusion. Cumulative exams must synthesize
+across at least two units. Include rubric (3/2/1/0 point scale).
+
+---
+
+BEHAVIOR RULES
+- Read 00_MASTER_INDEX before every response
+- Cite sources in every response
+- Prefer NOTES_ files over raw DATA_ when they exist
+- Check REF_ first for exam weight and priority topics
+- When a student answers incorrectly, explain why using source material
+- Lead with HIGH and CROSS-UNIT HIGH when asked what to study
+- Always flag material gaps
+- If a NOTES_ file is missing, prompt the student to run
+  PROMPT_Extraction for that unit first
+- If source files appear unprefixed or unrecognized, prompt the
+  student to run PROMPT_Index, save the output as a Note, then
+  bring that Note and the existing 00_MASTER_INDEX to Claude
+  outside NotebookLM to merge and generate a clean updated index</pre>
+      </div>
+    </div>
+
+    <!-- PROMPT_INDEX -->
+    <div class="section" id="prompt-index">
+      <div class="section-header">
+        <div class="phase-dot" style="background:#e67e22; box-shadow: 0 0 8px #e67e22;"></div>
+        <h2>PROMPT_Index — Utility Prompt</h2>
+        <span class="section-meta">Run First · If Files Are Not Renamed</span>
+      </div>
+
+      <div class="info-box" style="border-left-color: #e67e22;">
+        <strong>Run this if you skipped Phase 1 or uploaded raw unprefixed files.</strong> PROMPT_Index audits every source in your notebook and outputs a structured report of what it finds. Save that output as a Note, then bring it to Claude outside NotebookLM along with your existing <code style="background:var(--surface);padding:1px 5px;border-radius:2px;font-size:12px;">00_MASTER_INDEX</code>. Claude merges the two, resolves conflicts, and generates a clean updated index. Upload the new index to NotebookLM and delete the old one. Your GENERATED NOTES progress is preserved. Invoke it by saying: <strong>"Use PROMPT_Index"</strong>
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <h3>PROMPT_Index</h3>
+          <span class="prompt-tag notebooklm">NotebookLM</span>
+        </div>
+        <div class="prompt-desc">Upload PROMPT_Index.md as a source file. Then invoke it. The system does the rest.</div>
+        <div class="prompt-where"><strong>→ Invoke with:</strong> "Use PROMPT_Index"</div>
+        <pre class="notebooklm-prompt">STEP 1 — AUDIT ALL SOURCES
+
+List every source in this notebook. For each source examine its
+contents and determine:
+
+SOURCE NAME: [exact name as it appears in NotebookLM]
+FILE TYPE: textbook / glossary / formula sheet / syllabus /
+           sample test / study guide / notes / other
+CONTENT SUMMARY: 1-2 sentences describing the file
+UNITS OR CHAPTERS COVERED: which units or chapters — or FULL COURSE
+RECOMMENDED PREFIX: what prefix should this file have
+
+PREFIX SYSTEM:
+DATA_U[#]_     Textbook or study material for a specific unit
+DATA_C[#]_     Textbook or study material for a specific chapter
+DATA_FULL_     Textbook or study material covering the full course
+VOCAB_U[#]_    Glossary or key terms for a specific unit
+VOCAB_C[#]_    Glossary or key terms for a specific chapter
+VOCAB_FULL_    Glossary covering the full course
+FORMULAS_U[#]_ Formula sheet for a specific unit
+FORMULAS_C[#]_ Formula sheet for a specific chapter
+FORMULAS_FULL_ Formula sheet covering the full course
+REF_           Syllabus, sample test, practice exam, grading guide
+PROMPT_        Prompt instruction files — do not rename
+00_MASTER_INDEX The index file — do not rename
+
+---
+
+STEP 2 — FLAG ISSUES
+
+UNPREFIXED FILES: current name → recommended rename
+AMBIGUOUS FILES: files where content type is unclear
+MISSING COVERAGE: units or chapters with no DATA source
+MISSING VOCAB: units with DATA but no glossary source
+MISSING FORMULAS: units with DATA but no formula source
+DUPLICATE COVERAGE: multiple sources covering the same unit
+
+---
+
+STEP 3 — GENERATE 00_MASTER_INDEX
+
+Output the full index in this format:
+
+MASTER INDEX — [CLASS NAME]
+Generated by PROMPT_Index audit
+
+SOURCE AUDIT RESULTS
+CURRENT NAME          | TYPE       | COVERS    | RECOMMENDED PREFIX
+[one row per source]
+
+RENAME RECOMMENDATIONS
+CURRENT NAME → RECOMMENDED NAME
+[list all renames — renaming is recommended but not required]
+
+SOURCE FILES MAPPED TO PREFIX SYSTEM
+PREFIX              | SOURCE NAME (current)         | CONTENTS
+[one row per source]
+
+GENERATED NOTES — Track Progress Here
+[ ] NOTES_U1_Extraction    [ ] REVIEW_Master_Concept_Map
+[ ] NOTES_U1_Key_Concepts  [ ] REVIEW_Master_Glossary
+[expand for each unit found in the audit]
+
+FLAGS AND WARNINGS
+[all issues from Step 2]
+
+---
+
+STEP 4 — ADVISE THE USER
+
+Tell the user:
+1. Whether the notebook is ready to use or needs renames
+2. Which units or chapters have complete source coverage
+3. Which units or chapters are missing sources
+4. What to run next — if ready: "Use PROMPT_Extraction for Unit 1"</pre>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="section" id="extraction">
+      <div class="section-header">
+        <div class="phase-dot dot-p2"></div>
+        <h2>Phase 2 — Unit Setup Prompts</h2>
+        <span class="section-meta">Run in NotebookLM · Once per unit · In order</span>
+      </div>
+
+      <div class="info-box">
+        <strong>Replace [#] with your unit number in every prompt.</strong> Run steps 1–7 in order. Do not skip ahead — each step feeds the next. Save every output as a Note with the exact title shown before moving to the next step.
+      </div>
+
+      <!-- Step 1 -->
+      <div class="prompt-block" id="extraction">
+        <div class="step-header">
+          <div class="step-num green">1</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Extraction Pass</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-desc" style="margin-top:8px;">The foundation. Everything else in this unit builds from this note. If your files are not prefixed, the prompt will find them using 00_MASTER_INDEX or by searching all available sources. Confirm all 5 sections are present before moving to Step 2.</div>
+        <div class="prompt-where"><strong>→ Invoke with:</strong> "Use PROMPT_Extraction for Unit [#]"</div>
+        <pre class="notebooklm-prompt">SOURCE RESOLUTION — Find your sources in this order before starting:
+
+1. Check 00_MASTER_INDEX for the correct source name for this scope
+2. Look for a source prefixed DATA_U[#]_ or DATA_C[#]_
+3. If no prefixed source exists, search all available sources for
+   content matching the unit or chapter specified — look for chapter
+   headings, unit markers, or table of contents entries
+4. For VOCAB: look for VOCAB_U[#]_, VOCAB_C[#]_, or any source
+   containing a glossary, key terms list, or vocabulary section
+5. For FORMULAS: look for FORMULAS_U[#]_, or any source containing
+   formulas or equations
+6. If a source cannot be found for a section, state what is missing
+   and continue — do not stop
+
+---
+
+SECTION 1 — KEY CONCEPTS OUTLINE
+Read the DATA source for the specified scope. Produce a hierarchical
+numbered outline of every major concept. Mirror the textbook's header
+structure. If the source is an unprefixed textbook, use the chapter or
+unit number to locate the correct section.
+
+SECTION 2 — GLOSSARY CROSS-REFERENCE
+Find the VOCAB source and locate each term in DATA. If no dedicated
+VOCAB source exists, extract key terms directly from DATA — look for
+bolded, italicized, and defined terms and terms in callout boxes.
+
+For each term: TERM | DEFINITION | CONTEXT (1-3 sentences from DATA) |
+FORMULA LINK | PRIORITY (HIGH/MEDIUM/LOW)
+HIGH = defined + explained in DATA + in REF questions
+MEDIUM = defined + explained in DATA, not in REF
+LOW = found in source with little explanation
+
+List HIGH first, MEDIUM second, LOW last. End with GAPS section.
+Note if terms were extracted from DATA directly vs a VOCAB source.
+
+SECTION 3 — FORMULA CROSS-REFERENCE
+Find the FORMULAS source. If none exists, scan DATA for equations
+and formulas. For each formula: FORMULA | WHAT IT SOLVES | VARIABLES |
+VOCAB TERMS CONNECTED | DATA EXAMPLE | REF FLAG (YES/NO)
+If no formulas found anywhere, note it and skip.
+
+SECTION 4 — TEXTBOOK SIGNALS SCAN
+Extract from DATA:
+- Italicized or bold terms not captured in Section 2
+- Callout boxes, sidebars, highlighted or shaded blocks
+- Worked examples (concept + brief description)
+- End of chapter or unit review questions
+- Author flagged reminders — "note", "remember", warnings
+
+SECTION 5 — SUMMARY AND PRIORITY LIST
+- CORE THEMES: 2-3 sentences on what this scope is about
+- TOP 10 STUDY PRIORITIES: ranked with reason for each
+- FOUNDATIONAL TERMS FROM PREVIOUS UNITS: how they connect here
+- MATERIAL GAPS: terms or concepts with thin source coverage
+- EXAM INTELLIGENCE: topics flagged by REF sources if available
+- SOURCE NOTE: which sources were used per section; flag any missing</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>NOTES_U[#]_Extraction</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 2 -->
+      <div class="prompt-block" id="key-concepts">
+        <div class="step-header">
+          <div class="step-num green">2</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Key Concepts Outline</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-where" style="margin-top:8px;"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using NOTES_U[#]_Extraction, give me a clean key concepts outline
+for Unit [#]. Organize by major topic and sub-concept. Bold HIGH
+priority items. Flag any item that connects to a formula.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>NOTES_U[#]_Key_Concepts</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 3 -->
+      <div class="prompt-block" id="glossary">
+        <div class="step-header">
+          <div class="step-num green">3</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Glossary</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-where" style="margin-top:8px;"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using NOTES_U[#]_Extraction and VOCAB_U[#], generate the full
+glossary for Unit [#]. For each term: definition, one sentence of
+context from the textbook, any connected formula, and priority rating
+(HIGH / MEDIUM / LOW). Sort HIGH first. List all gaps at the end.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>NOTES_U[#]_Glossary</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 4 -->
+      <div class="prompt-block" id="formulas">
+        <div class="step-header">
+          <div class="step-num green">4</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Formula Sheet</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-desc" style="margin-top:8px;">Skip this step entirely if the class has no formulas.</div>
+        <div class="prompt-where"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using NOTES_U[#]_Extraction and FORMULAS_U[#], generate the formula
+reference sheet for Unit [#]. For each formula: expression, plain
+language explanation, variable definitions, connected vocab terms,
+and whether it appeared in REF sample questions.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>NOTES_U[#]_Formulas</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 5 -->
+      <div class="prompt-block" id="slide-deck">
+        <div class="step-header">
+          <div class="step-num green">5</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Slide Deck Outline</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-desc" style="margin-top:8px;">If NotebookLM offers to generate the actual slide deck after the outline, accept it.</div>
+        <div class="prompt-where"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using NOTES_U[#]_Key_Concepts and NOTES_U[#]_Glossary, generate a
+slide deck outline for Unit [#]. One slide per HIGH priority concept.
+Each slide: title, 3-5 bullets, key term definition, formula reference
+if applicable. Group MEDIUM priority concepts together near the end.
+Final slide: Top 10 Study Priorities for this unit.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>NOTES_U[#]_Slide_Deck_Outline</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 6 -->
+      <div class="prompt-block" id="study-notes">
+        <div class="step-header">
+          <div class="step-num green">6</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Study Notes</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-where" style="margin-top:8px;"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using NOTES_U[#]_Key_Concepts, NOTES_U[#]_Glossary, and
+NOTES_U[#]_Formulas, write study notes for Unit [#] in clear plain
+language. Cover every HIGH and MEDIUM priority concept. Include
+definitions inline. Show how concepts connect to each other. Include
+any worked examples from the textbook signals scan. End with a summary
+paragraph of the unit's core themes.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>NOTES_U[#]_Study_Notes</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 7 -->
+      <div class="prompt-block" id="practice-quiz">
+        <div class="step-header">
+          <div class="step-num green">7</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Practice Quiz</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-desc" style="margin-top:8px;">Always do this last — test against the polished notes, not the raw source files.</div>
+        <div class="prompt-where"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using NOTES_U[#]_Study_Notes, NOTES_U[#]_Glossary, and REF, generate
+a practice quiz for Unit [#]. Distribution: 80% multiple choice,
+15% short answer, 5% essay. Weight toward HIGH priority terms and
+topics flagged in REF sample questions. Include an answer key with
+explanations and source citations for every answer.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>NOTES_U[#]_Practice_Quiz</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="section" id="concept-map">
+      <div class="section-header">
+        <div class="phase-dot dot-p3"></div>
+        <h2>Phase 3 — Cross-Unit Review Prompts</h2>
+        <span class="section-meta">Run after all units complete · In order</span>
+      </div>
+
+      <div class="info-box">
+        <strong>Do not start Phase 3 until every unit has all 7 notes saved.</strong> These prompts synthesize across all units — they only work when the full set of NOTES_U[#]_ files exists.
+      </div>
+
+      <!-- Step 1 -->
+      <div class="prompt-block">
+        <div class="step-header">
+          <div class="step-num purple">1</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Master Concept Map</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-where" style="margin-top:8px;"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using all NOTES_U[#]_Key_Concepts notes across every unit, build a
+master concept map for the full course. Identify:
+1. The 5-10 core themes that run through multiple units
+2. How each unit connects to the ones before and after it
+3. Concepts introduced early that become more complex later —
+   trace that progression explicitly
+4. Any unit that stands largely alone — flag for independent study
+Format as a structured outline with units as branches and shared
+themes as the trunk.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>REVIEW_Master_Concept_Map</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 2 -->
+      <div class="prompt-block" id="master-glossary">
+        <div class="step-header">
+          <div class="step-num purple">2</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Master Glossary</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-where" style="margin-top:8px;"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using all NOTES_U[#]_Glossary notes across every unit, compile a
+master glossary for the full course. For each term:
+- Keep definition and priority rating from the unit note
+- Add a UNITS field showing every unit the term appears in
+- If a term appears in multiple units, write one sentence on how
+  its meaning or application evolves across units
+- Flag any term that is HIGH priority in two or more units
+Sort alphabetically. Add a CROSS-UNIT HIGH PRIORITY section at the
+end listing only the multi-unit HIGH terms.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>REVIEW_Master_Glossary</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 3 -->
+      <div class="prompt-block" id="master-formulas">
+        <div class="step-header">
+          <div class="step-num purple">3</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Master Formula Sheet</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-desc" style="margin-top:8px;">Skip if the class has no formulas.</div>
+        <div class="prompt-where"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using all NOTES_U[#]_Formulas notes, compile a master formula sheet
+for the full course. For each formula: expression, plain language
+explanation, which unit it comes from, any units where it reappears,
+connected vocab terms from REVIEW_Master_Glossary, and whether it
+appeared in any REF sample questions. End with a ranked list of
+formulas most likely to appear on a cumulative exam.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>REVIEW_Master_Formulas</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 4 -->
+      <div class="prompt-block" id="weak-spot">
+        <div class="step-header">
+          <div class="step-num purple">4</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Weak Spot Report</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-desc" style="margin-top:8px;">The most important output most people never think to run. Do not skip this.</div>
+        <div class="prompt-where"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using all NOTES_U[#]_Extraction notes, compile a full weak spot
+report for the course. Include:
+1. Every term flagged LOW priority or GAP in any unit — listed by unit
+2. Any concept in REF sample questions with thin DATA coverage
+3. Any unit with significantly more gaps than others — flag the
+   entire unit as needing supplemental resources
+4. The top 10 weak spots to address before the final exam
+Be direct. Flag everything underserved in the materials.</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>REVIEW_Weak_Spot_Report</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 5 -->
+      <div class="prompt-block" id="final-deck">
+        <div class="step-header">
+          <div class="step-num purple">5</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Final Slide Deck</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-desc" style="margin-top:8px;">If NotebookLM offers to generate the actual slide deck, accept it.</div>
+        <div class="prompt-where"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using REVIEW_Master_Concept_Map, REVIEW_Master_Glossary, and
+REVIEW_Master_Formulas, generate a full course slide deck outline:
+- Slide 1: Course overview and core themes
+- One section per unit: title slide, one slide per HIGH priority
+  concept, one slide grouping MEDIUM priority concepts
+- Cross-unit connections slide
+- Master formula reference slide
+- CROSS-UNIT HIGH PRIORITY terms slide
+- Final slide: Top 20 things most likely on the final exam
+  based on REF sources and cross-unit frequency</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>REVIEW_Final_Slide_Deck_Outline</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 6 -->
+      <div class="prompt-block" id="cumulative-notes">
+        <div class="step-header">
+          <div class="step-num purple">6</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Cumulative Study Notes</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-where" style="margin-top:8px;"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using all NOTES_U[#]_Study_Notes and REVIEW_Master_Concept_Map,
+write cumulative study notes for the full course. Requirements:
+- Clear plain language — this is what I read the night before the exam
+- Organize by core theme from the concept map, not by unit
+- Cover every HIGH priority concept from every unit
+- Where a concept evolves across units, explain that progression once
+- Include all CROSS-UNIT HIGH PRIORITY vocab terms with definitions
+- Reference formulas inline where they apply
+- End with a one-page course summary: the 10 most important things
+  to know walking into the final exam</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>REVIEW_Cumulative_Study_Notes</strong>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Step 7 -->
+      <div class="prompt-block" id="cumulative-exam">
+        <div class="step-header">
+          <div class="step-num purple">7</div>
+          <div class="prompt-label" style="margin-bottom:0">
+            <h3>Cumulative Practice Exam</h3>
+            <span class="prompt-tag notebooklm">NotebookLM</span>
+          </div>
+        </div>
+        <div class="prompt-where" style="margin-top:8px;"><strong>→ Paste into:</strong> NotebookLM chat</div>
+        <pre class="notebooklm-prompt">Using REVIEW_Cumulative_Study_Notes, REVIEW_Master_Glossary,
+REVIEW_Master_Formulas, and all REF sources, generate a full
+cumulative practice exam. Requirements:
+- 80% multiple choice, 15% short answer, 5% essay
+- Every unit must be represented — weight toward units with more
+  REF coverage and higher cross-unit concept overlap
+- All CROSS-UNIT HIGH PRIORITY terms must appear
+- At least one formula application question per unit with formulas
+- Essay questions must synthesize across at least two units
+- Full answer key with explanations, model answers, essay rubrics,
+  and source citations for every answer</pre>
+        <div class="save-note">
+          <span class="save-note-icon">💾</span>
+          <span>Save as Note: </span>
+          <strong>REVIEW_Cumulative_Practice_Exam</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>NotebookLM Study System — Prompts Reference</p>
+      <p>Use with: Quick Start Guide · notebooklm.google.com</p>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
