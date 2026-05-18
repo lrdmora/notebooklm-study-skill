@@ -1,6 +1,6 @@
 # NotebookLM Study Skill — Installer (Windows PowerShell)
 
-$REPO = "https://github.com/YOUR-GITHUB-USERNAME/notebooklm-study-skill"
+$REPO = "https://github.com/lrdmora/notebooklm-study-skill"
 $SKILL_NAME = "notebooklm-study-skill"
 
 Write-Host ""

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # NotebookLM Study Skill — Installer (Mac / Linux)
 
-REPO="https://github.com/YOUR-GITHUB-USERNAME/notebooklm-study-skill"
+REPO="https://github.com/lrdmora/notebooklm-study-skill"
 SKILL_NAME="notebooklm-study-skill"
 
 echo ""

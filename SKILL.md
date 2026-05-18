@@ -26,11 +26,11 @@ do the following **before anything else**:
 3. Run the appropriate command:
    - **Global install:**
      ```
-     git clone https://github.com/YOUR-GITHUB-USERNAME/notebooklm-study-skill ~/.claude/skills/notebooklm-study-skill
+     git clone https://github.com/lrdmora/notebooklm-study-skill ~/.claude/skills/notebooklm-study-skill
      ```
    - **Local install:**
      ```
-     git clone https://github.com/YOUR-GITHUB-USERNAME/notebooklm-study-skill .claude/skills/notebooklm-study-skill
+     git clone https://github.com/lrdmora/notebooklm-study-skill .claude/skills/notebooklm-study-skill
      ```
 
 4. Confirm to the user:

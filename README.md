@@ -11,7 +11,7 @@ A Claude Code skill that builds a complete, structured study system for any clas
 Paste either of the following into any Claude Code session:
 
 ```
-Install this skill: https://github.com/YOUR-GITHUB-USERNAME/notebooklm-study-skill
+Install this skill: https://github.com/lrdmora/notebooklm-study-skill
 ```
 
 Claude will ask:
