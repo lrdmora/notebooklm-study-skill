@@ -1,6 +1,6 @@
 # NotebookLM Study Skill
 
-A Claude Code skill that builds a complete, structured study system for any class using Google NotebookLM. Answer 7 intake questions and receive a ready-to-upload zip package of markdown files — master index, system prompt, and 15 reusable prompt files tailored to your course.
+A Claude Code skill that builds a complete, structured study system for any class using Google NotebookLM. Answer 7 intake questions and receive a ready-to-upload zip package of markdown files — master index, system prompt, 15 reusable prompt files, and a prompt builder guide tailored to your course.
 
 ---
 
@@ -84,6 +84,7 @@ Claude writes all files and zips them for download. Upload the zip contents dire
 |------|---------|
 | `00_MASTER_INDEX.md` | Central index — NotebookLM reads this before every response |
 | `SYSTEM_PROMPT.md` | Paste contents into the NotebookLM instructions panel |
+| `GUIDE_Prompt_Builder.md` | Generate new PROMPT_ files on demand inside NotebookLM |
 | `PROMPT_Extraction.md` | Full 5-section extraction pass for any unit |
 | `PROMPT_Index.md` | Audits your notebook sources and rebuilds the master index |
 | `PROMPT_Key_Concepts.md` | Hierarchical concept outline |
@@ -115,6 +116,18 @@ Every PROMPT_ file uses `[UNIT X]`, `[CHAPTER X]`, or `[SCOPE]` as placeholders.
 > *"Use PROMPT_Slide_Deck for Unit 1"*
 > *"Use PROMPT_Flashcards for Chapter 3"*
 > *"Use PROMPT_Cumulative_Exam for the full course"*
+
+---
+
+## Creating New Prompts with GUIDE_Prompt_Builder
+
+`GUIDE_Prompt_Builder.md` is a meta-guide uploaded to NotebookLM alongside your PROMPT_ files. When the built-in prompts don't cover what you need, invoke it to generate a new one on demand:
+
+> *"Use GUIDE_Prompt_Builder to make me a prompt that compares topics across all units in a table"*
+> *"Use GUIDE_Prompt_Builder to make me a prompt that writes a one-page cheat sheet for Unit 3"*
+> *"Use GUIDE_Prompt_Builder to make me a prompt that quizzes me only on formula application"*
+
+NotebookLM will output a complete, properly structured PROMPT_ file. Save it locally, upload it to your notebook as a new source, and invoke it like any other prompt.
 
 ---
 
@@ -157,7 +170,8 @@ notebooklm-study-skill/
 │   ├── 06a_prompt_files_unit.md
 │   ├── 06b_prompt_files_crossunit.md
 │   ├── 06c_prompt_files_unit2.md
-│   └── 06d_prompt_index.md
+│   ├── 06d_prompt_index.md
+│   └── 06e_guide_files.md
 ├── docs/
 │   ├── NotebookLM_QuickStart_Guide.html
 │   ├── NotebookLM_QuickStart_Guide.pdf
