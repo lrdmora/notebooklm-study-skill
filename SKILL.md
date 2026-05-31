@@ -74,6 +74,7 @@ Here is what I will generate for [CLASS NAME]:
 UPLOAD FILES (add to NotebookLM as sources)
 - 00_MASTER_INDEX.md
 - SYSTEM_PROMPT.md
+- GUIDE_Prompt_Builder.md
 - PROMPT_Extraction.md
 - PROMPT_Index.md
 - PROMPT_Key_Concepts.md
@@ -89,9 +90,6 @@ UPLOAD FILES (add to NotebookLM as sources)
 [PROMPT_Master_Formulas.md — included if formulas: YES]
 - PROMPT_Cumulative_Notes.md
 - PROMPT_Cumulative_Exam.md
-
-UPLOAD FILES (also add to NotebookLM as sources)
-- GUIDE_Prompt_Builder.md — generates new PROMPT_ files on demand
 
 REFERENCE (for your own use — do not upload)
 - SETUP_GUIDE.md — step-by-step setup instructions
