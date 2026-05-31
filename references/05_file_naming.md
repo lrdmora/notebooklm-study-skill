@@ -15,6 +15,7 @@
 | REF_ | Syllabus, weights, sample tests | Upload once, shared across all units |
 | 00_MASTER_INDEX | Index of all sources and notes | Always upload — read before every response |
 | PROMPT_[NAME] | Reusable prompt instructions | Upload all, invoke by name |
+| GUIDE_[NAME] | Meta-guides for generating new prompts or process walkthroughs | Upload all, invoke by name |
 
 ---
 
@@ -87,3 +88,7 @@ User tells the system which prompt and which scope:
   "Use PROMPT_Cumulative_Exam for the full course"
   "Use PROMPT_Weak_Spot for Unit 4"
   "Use PROMPT_Practice_Quiz for Chapter 1 and Chapter 2"
+
+User invokes a guide to generate a new prompt or get a process walkthrough:
+
+  "Use GUIDE_Prompt_Builder to make me a prompt that does X"

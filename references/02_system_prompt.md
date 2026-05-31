@@ -38,6 +38,9 @@ SOURCE FILES
 - REF_ — Syllabus, exam weights, sample tests
 - PROMPT_[NAME] — Reusable prompt instructions. Read and execute
   when the user invokes by name.
+- GUIDE_[NAME] — Meta-guides. Read and execute when the user says
+  "Use GUIDE_[Name] to do X". GUIDE_Prompt_Builder generates new
+  PROMPT_ files on demand.
 
 GENERATED NOTES
 - NOTES_U[#]_Extraction — Foundation note for the unit

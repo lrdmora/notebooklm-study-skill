@@ -52,6 +52,7 @@ do the following **before anything else**:
 | `references/06c_prompt_files_unit2.md` | Unit-level PROMPT_ templates: Slide_Deck, Study_Notes, Practice_Quiz, Flashcards, Weak_Spot, Concept_Map | Generating remaining unit PROMPT_ files |
 | `references/06b_prompt_files_crossunit.md` | Cross-unit PROMPT_ templates: Master_Glossary, Master_Formulas, Cumulative_Notes, Cumulative_Exam | Generating cross-unit PROMPT_ files |
 | `references/06d_prompt_index.md` | PROMPT_Index template — audits notebook sources and builds or repairs 00_MASTER_INDEX | Always include in generated package |
+| `references/06e_guide_files.md` | GUIDE_Prompt_Builder template — generates new PROMPT_ files on demand | Always include in generated package |
 
 ---
 
@@ -89,6 +90,9 @@ UPLOAD FILES (add to NotebookLM as sources)
 - PROMPT_Cumulative_Notes.md
 - PROMPT_Cumulative_Exam.md
 
+UPLOAD FILES (also add to NotebookLM as sources)
+- GUIDE_Prompt_Builder.md — generates new PROMPT_ files on demand
+
 REFERENCE (for your own use — do not upload)
 - SETUP_GUIDE.md — step-by-step setup instructions
 
@@ -101,6 +105,7 @@ Wait for confirmation before proceeding.
 
 Read `references/06a_prompt_files_unit.md` and `references/06c_prompt_files_unit2.md` for unit PROMPT_ templates.
 Read `references/06b_prompt_files_crossunit.md` for cross-unit PROMPT_ templates.
+Read `references/06e_guide_files.md` for the GUIDE_Prompt_Builder template.
 Read `references/02_system_prompt.md` for the system prompt template.
 Read `references/01_intake_and_index.md` for the master index template.
 
